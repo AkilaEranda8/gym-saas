@@ -14,8 +14,8 @@ SERVER_USER  = "root"
 SERVER_PORT  = 22
 APP_DIR      = "/opt/gymapp"
 GIT_REPO     = "https://github.com/AkilaEranda8/gym-saas.git"
-OLD_PASSWORD = "#Wu3|9@xwE8u"
-NEW_PASSWORD = "GymSaaS@2026!"   # ← server ලෙ set වෙන new password
+OLD_PASSWORD = "&eDr475`l3Mt"   # ← Hetzner rebuild ලෙ දුන් password
+NEW_PASSWORD = "Gym2026"                    # ← script ලෙ set වෙන new password
 SSL_EMAIL    = "admin@hexalyte.com"
 SSL_DOMAINS  = "gym.hexalyte.com,api.gym.hexalyte.com,rabbitmq.gym.hexalyte.com"
 # ──────────────────────────────────────────────────────────
@@ -33,11 +33,11 @@ DEPLOY_COMMANDS = [
     # Pull latest changes
     f"git -C {APP_DIR} pull origin main",
 
-    # Copy .env if not already present
-    f"[ -f {APP_DIR}/.env ] && echo '.env exists, skipping' || cp {APP_DIR}/.env.production {APP_DIR}/.env",
+    # Always sync .env from .env.production
+    f"cp {APP_DIR}/.env.production {APP_DIR}/.env",
 
-    # Firewall
-    "ufw allow 80 && ufw allow 443 && echo 'y' | ufw enable || true",
+    # Firewall (allow SSH first to prevent lockout)
+    "ufw allow 22; ufw allow 80; ufw allow 443; echo 'y' | ufw enable || true",
 
     # ── SSL: get certs before nginx starts (standalone mode) ──
     # Stop nginx if already running
@@ -50,7 +50,7 @@ DEPLOY_COMMANDS = [
     f"--cert-name gym.hexalyte.com || echo 'Cert already exists or failed — check manually'",
 
     # Build & start all containers (nginx now has certs)
-    f"docker compose -f {APP_DIR}/docker-compose.yml up -d --build",
+    f"docker compose -f {APP_DIR}/docker-compose.yml up -d --build --remove-orphans",
 
     # Auto-renew cron (runs twice daily)
     "(crontab -l 2>/dev/null; echo '0 3 * * * certbot renew --quiet && "
