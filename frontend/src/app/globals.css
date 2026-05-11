@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { border-color: theme('colors.gray.200'); }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  }
+  :root {
+    --sidebar-width: 260px;
+    --tc-background: 0 0% 100%;
+    --tc-foreground: 222.2 84% 4.9%;
+    --tc-card: 0 0% 100%;
+    --tc-card-foreground: 222.2 84% 4.9%;
+    --tc-popover: 0 0% 100%;
+    --tc-popover-foreground: 222.2 84% 4.9%;
+    --tc-primary: 221.2 83.2% 53.3%;
+    --tc-primary-foreground: 210 40% 98%;
+    --tc-secondary: 210 40% 96.1%;
+    --tc-secondary-foreground: 222.2 47.4% 11.2%;
+    --tc-muted: 210 40% 96.1%;
+    --tc-muted-foreground: 215.4 16.3% 46.9%;
+    --tc-accent: 210 40% 96.1%;
+    --tc-accent-foreground: 222.2 47.4% 11.2%;
+    --tc-destructive: 0 84.2% 60.2%;
+    --tc-destructive-foreground: 210 40% 98%;
+    --tc-border: 214.3 31.8% 91.4%;
+    --tc-input: 214.3 31.8% 91.4%;
+    --tc-ring: 221.2 83.2% 53.3%;
+    --tc-radius: 0.5rem;
+  }
+  .dark {
+    --tc-background: 222.2 84% 4.9%;
+    --tc-foreground: 210 40% 98%;
+    --tc-card: 222.2 84% 4.9%;
+    --tc-card-foreground: 210 40% 98%;
+    --tc-popover: 222.2 84% 4.9%;
+    --tc-popover-foreground: 210 40% 98%;
+    --tc-primary: 217.2 91.2% 59.8%;
+    --tc-primary-foreground: 222.2 47.4% 11.2%;
+    --tc-secondary: 217.2 32.6% 17.5%;
+    --tc-secondary-foreground: 210 40% 98%;
+    --tc-muted: 217.2 32.6% 17.5%;
+    --tc-muted-foreground: 215 20.2% 65.1%;
+    --tc-accent: 217.2 32.6% 17.5%;
+    --tc-accent-foreground: 210 40% 98%;
+    --tc-destructive: 0 62.8% 30.6%;
+    --tc-destructive-foreground: 210 40% 98%;
+    --tc-border: 217.2 32.6% 17.5%;
+    --tc-input: 217.2 32.6% 17.5%;
+    --tc-ring: 224.3 76.3% 48%;
+  }
+}
+
+/* ─── Light mode overrides ────────────────────────────────────────────────
+   Applied when html.light class is present (toggled by ThemeProvider).
+   Overrides every hardcoded dark hex used across the component tree.
+────────────────────────────────────────────────────────────────────────── */
+
+/* Page / layout backgrounds */
+html.light body                    { background-color: #f1f5f9; color: #0f172a; }
+html.light .bg-\[\#080d16\]        { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#0d1117\]        { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#0a0f1a\]        { background-color: #f1f5f9 !important; }
+html.light .min-h-screen           { background-color: #f1f5f9; }
+
+/* Card / surface backgrounds */
+html.light .bg-\[\#111827\]        { background-color: #ffffff !important; }
+html.light .bg-\[\#161b27\]        { background-color: #ffffff !important; }
+html.light .bg-\[\#1a2234\]        { background-color: #ffffff !important; }
+html.light .bg-\[\#0f172a\]        { background-color: #f8fafc !important; }
+html.light .bg-\[\#0d1117\]        { background-color: #f8fafc !important; }
+
+/* Hover / active / input backgrounds */
+html.light .bg-\[\#1e293b\]        { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#1e293b\]\/40    { background-color: rgba(241,245,249,0.7) !important; }
+html.light .bg-\[\#1e293b\]\/50    { background-color: rgba(241,245,249,0.8) !important; }
+html.light .bg-\[\#334155\]        { background-color: #e2e8f0 !important; }
+
+/* Header */
+html.light header.sticky           { background-color: #ffffff !important; border-bottom-color: #e2e8f0 !important; }
+html.light .bg-gray-800\/70        { background-color: #f1f5f9 !important; }
+html.light .bg-gray-800            { background-color: #f1f5f9 !important; }
+html.light .bg-gray-900            { background-color: #ffffff !important; }
+html.light .bg-gray-700            { background-color: #e2e8f0 !important; }
+
+
+/* Borders */
+html.light .border-\[\#1e293b\]    { border-color: #e2e8f0 !important; }
+html.light .border-\[\#1e293b\]\/60{ border-color: rgba(226,232,240,0.8) !important; }
+html.light .border-\[\#334155\]    { border-color: #cbd5e1 !important; }
+html.light .border-gray-800        { border-color: #e2e8f0 !important; }
+html.light .border-gray-800\/60    { border-color: rgba(226,232,240,0.8) !important; }
+html.light .border-gray-700        { border-color: #e2e8f0 !important; }
+html.light .border-gray-700\/50    { border-color: rgba(226,232,240,0.7) !important; }
+html.light .border-gray-700\/60    { border-color: rgba(226,232,240,0.8) !important; }
+
+/* Primary text */
+html.light .text-\[\#e2e8f0\]      { color: #0f172a !important; }
+html.light .text-white             { color: #0f172a !important; }
+
+/* Secondary text */
+html.light .text-\[\#94a3b8\]      { color: #475569 !important; }
+html.light .text-gray-400          { color: #475569 !important; }
+html.light .text-gray-300          { color: #334155 !important; }
+
+/* Muted text */
+html.light .text-\[\#475569\]      { color: #64748b !important; }
+html.light .text-gray-500          { color: #64748b !important; }
+html.light .text-\[\#334155\]      { color: #94a3b8 !important; }
+html.light .text-gray-600          { color: #475569 !important; }
+
+/* Dividers */
+html.light .bg-gray-700\/60        { background-color: #e2e8f0 !important; }
+html.light .bg-gray-800\/30        { background-color: rgba(241,245,249,0.7) !important; }
+
+/* Inputs / selects */
+html.light input:not([class*="bg-"]),
+html.light select:not([class*="bg-"]) {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+html.light input::placeholder      { color: #94a3b8 !important; }
+
+/* Ring on focus */
+html.light .ring-\[\#111827\]      { --tw-ring-color: #ffffff !important; }
+
+/* Stat card accent bar stays colored — don't override inline styles */
+
+/* Dashboard-specific overrides */
+html.light .bg-\[\#161b27\]            { background-color: #ffffff !important; }
+html.light .border-gray-800\/40        { border-color: rgba(226,232,240,0.6) !important; }
+html.light .border-gray-800\/60        { border-color: rgba(226,232,240,0.8) !important; }
+html.light .bg-gray-800\/60            { background-color: #f1f5f9 !important; }
+html.light .bg-gray-800\/30            { background-color: rgba(241,245,249,0.7) !important; }
+html.light .bg-gray-800\/40            { background-color: rgba(241,245,249,0.8) !important; }
+html.light .hover\:bg-gray-800\/30:hover { background-color: rgba(241,245,249,0.9) !important; }
+html.light .divide-gray-800\/40 > * + * { border-color: rgba(226,232,240,0.6) !important; }
+html.light .text-gray-200              { color: #0f172a !important; }
+html.light .text-gray-700              { color: #94a3b8 !important; }
+
+/* Progress bar tracks */
+html.light .bg-gray-800.rounded-full   { background-color: #e2e8f0 !important; }
+html.light .bg-gray-800:not(.border):not(button):not(div[class*="border"]) {
+  background-color: #e2e8f0 !important;
+}
+
+/* Inline-style Recharts override via filter (light mode tint) */
+html.light .recharts-cartesian-grid line { stroke: #e2e8f0 !important; }
+html.light .recharts-text                { fill: #64748b !important; }
+html.light .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Status pills keep their color in light mode — only soften border */
+html.light .border-green-500\/30       { border-color: rgba(34,197,94,0.4) !important; }
+html.light .border-yellow-500\/30      { border-color: rgba(234,179,8,0.4) !important; }
+html.light .border-red-500\/30         { border-color: rgba(239,68,68,0.4) !important; }
+html.light .border-blue-500\/30        { border-color: rgba(59,130,246,0.4) !important; }
+html.light .border-gray-500\/30        { border-color: rgba(107,114,128,0.4) !important; }
+
+/* Skeleton pulse bg */
+html.light .bg-gray-800.animate-pulse  { background-color: #e2e8f0 !important; }
+
+/* Scrollbar */
+html.light ::-webkit-scrollbar           { background: #f1f5f9; }
+html.light ::-webkit-scrollbar-thumb     { background: #cbd5e1; border-radius: 4px; }
+html.light ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+@layer components {
+  .card {
+    @apply bg-white border border-gray-200 rounded-xl p-5 shadow-sm;
+  }
+  .btn-primary {
+    @apply bg-violet-600 hover:bg-violet-500 text-white font-medium px-4 py-2 rounded-lg
+           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors;
+  }
+  .input {
+    @apply bg-white border border-gray-300 text-gray-900 rounded-lg px-3 py-2
+           focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent
+           placeholder:text-gray-400 w-full;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-green  { @apply badge bg-emerald-100 text-emerald-700; }
+  .badge-red    { @apply badge bg-red-100 text-red-700; }
+  .badge-yellow { @apply badge bg-amber-100 text-amber-700; }
+  .badge-blue   { @apply badge bg-blue-100 text-blue-700; }
+  .badge-gray   { @apply badge bg-gray-100 text-gray-600; }
+}

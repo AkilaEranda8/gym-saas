@@ -1,0 +1,17 @@
+package com.gymapp.modules.branch;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface BranchRepository extends JpaRepository<Branch, UUID> {
+
+    List<Branch> findAllByGymIdAndActiveTrue(UUID gymId);
+    List<Branch> findAllByGymId(UUID gymId);
+    Optional<Branch> findByIdAndGymId(UUID id, UUID gymId);
+    boolean existsByNameAndGymId(String name, UUID gymId);
+}

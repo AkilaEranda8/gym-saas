@@ -1,0 +1,42 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+
+# Mobile (React Native / Expo)
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker volumes (local dev)
+postgres_data/
+redis_data/

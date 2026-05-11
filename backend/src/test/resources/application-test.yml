@@ -1,0 +1,59 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:gymdb_test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;NON_KEYWORDS=VALUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  flyway:
+    enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.data.redis.RedisReactiveHealthContributorAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.amqp.RabbitHealthContributorAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.mail.MailHealthContributorAutoConfiguration
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: http://localhost:${wiremock.server.port:8089}/realms/gym-saas/protocol/openid-connect/token/introspect
+          client-id: gym-api
+          client-secret: test-secret
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+keycloak:
+  admin:
+    server-url: http://localhost:${wiremock.server.port:8089}
+    realm: gym-saas
+    client-id: gym-api
+    client-secret: test-secret
+
+payhere:
+  merchant-id: TEST_MERCHANT
+  merchant-secret: TEST_SECRET
+  sandbox: true
+  return-url: http://localhost:3000/billing
+  cancel-url: http://localhost:3000/billing
+  notify-url: http://localhost:9090/api/v1/billing/payhere/notify
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    com.gymapp: DEBUG
+    org.springframework.security: DEBUG

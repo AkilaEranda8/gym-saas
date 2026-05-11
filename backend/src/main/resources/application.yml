@@ -1,0 +1,148 @@
+server:
+  port: 9090
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: gym-api
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:gymdb}
+    username: ${DB_USER:gymuser}
+    password: ${DB_PASSWORD:gympass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    out-of-order: false
+
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: ${KEYCLOAK_INTROSPECT_URI:http://localhost:8080/realms/Gym-Saas/protocol/openid-connect/token/introspect}
+          client-id: ${KEYCLOAK_CLIENT_ID:gym-api}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET:changeme}
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          max-attempts: 3
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+
+keycloak:
+  admin:
+    server-url: ${KEYCLOAK_URL:http://localhost:8080}
+    realm: ${KEYCLOAK_REALM:Gym-Saas}
+    client-id: ${KEYCLOAK_CLIENT_ID:gym-api}
+    client-secret: ${KEYCLOAK_CLIENT_SECRET:changeme}
+    admin-username: ${KC_ADMIN_USER:admin}
+    admin-password: ${KC_ADMIN_PASSWORD:admin}
+  introspect:
+    cache-ttl: ${KEYCLOAK_INTROSPECT_CACHE_TTL:60}
+
+payhere:
+  merchant-id: ${PAYHERE_MERCHANT_ID:}
+  merchant-secret: ${PAYHERE_MERCHANT_SECRET:}
+  api-url: ${PAYHERE_API_URL:https://sandbox.payhere.lk}
+
+sentry:
+  dsn: ${SENTRY_DSN:}
+  environment: ${SPRING_PROFILES_ACTIVE:development}
+  traces-sample-rate: 0.2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    mail:
+      enabled: false
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    com.gymapp: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
