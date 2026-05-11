@@ -56,33 +56,6 @@ services:
       timeout: 10s
       retries: 5
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:24.0.3
-    container_name: gym-keycloak
-    restart: unless-stopped
-    command: start-dev
-    environment:
-      KEYCLOAK_ADMIN: ${KC_ADMIN_USER:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:-admin}
-      KC_HTTP_PORT: 8080
-      KC_HOSTNAME_STRICT: "false"
-      KC_HOSTNAME_STRICT_HTTPS: "false"
-      KC_HTTP_ENABLED: "true"
-      KC_HEALTH_ENABLED: "true"
-      KC_HOSTNAME_URL: ${KC_HOSTNAME_URL:-http://localhost:8080}
-    ports:
-      - "8080:8080"
-    networks:
-      - gym-network
-    healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo ok || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 90s
-    volumes:
-      - keycloak_data:/opt/keycloak/data
-
   gym-api:
     build:
       context: ./backend
@@ -105,11 +78,11 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
       KC_ADMIN_USER: ${KC_ADMIN_USER:-gym-admin-api}
       KC_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:-Admin@Gym!23}
-      KEYCLOAK_URL: ${KEYCLOAK_URL:-http://keycloak:8080}
+      KEYCLOAK_URL: ${KEYCLOAK_URL:-https://auth.hexalyte.com}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-Gym-Saas}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-gym-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-cbVU2lkQEgK85FY2tPMxxbrk3VytyIyn}
-      KEYCLOAK_INTROSPECT_URI: ${KEYCLOAK_URL:-http://keycloak:8080}/realms/${KEYCLOAK_REALM:-Gym-Saas}/protocol/openid-connect/token/introspect
+      KEYCLOAK_INTROSPECT_URI: ${KEYCLOAK_URL:-https://auth.hexalyte.com}/realms/${KEYCLOAK_REALM:-Gym-Saas}/protocol/openid-connect/token/introspect
       MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
       MAIL_PORT: ${MAIL_PORT:-587}
       MAIL_USERNAME: ${MAIL_USERNAME:-}
@@ -134,8 +107,6 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
 
   gym-web:
     build:
@@ -143,14 +114,14 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:9090}
-        NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL:-http://localhost:8080}
+        NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL:-https://auth.hexalyte.com}
         NEXT_PUBLIC_KEYCLOAK_REALM: ${NEXT_PUBLIC_KEYCLOAK_REALM:-Gym-Saas}
         NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${NEXT_PUBLIC_KEYCLOAK_CLIENT_ID:-gym-app}
     container_name: gym-web
     restart: unless-stopped
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:9090}
-      NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL:-http://localhost:8080}
+      NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL:-https://auth.hexalyte.com}
       NEXT_PUBLIC_KEYCLOAK_REALM: ${NEXT_PUBLIC_KEYCLOAK_REALM:-Gym-Saas}
       NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${NEXT_PUBLIC_KEYCLOAK_CLIENT_ID:-gym-app}
       API_URL: http://gym-api:9090
@@ -169,6 +140,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     ports:
       - "80:80"
       - "443:443"
@@ -184,7 +156,6 @@ volumes:
   postgres_data:
   redis_data:
   rabbitmq_data:
-  keycloak_data:
 
 networks:
   gym-network:
