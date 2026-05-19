@@ -2,152 +2,294 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  *, *::before, *::after { border-color: theme('colors.gray.200'); }
-  body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased;
-  }
-  :root {
-    --sidebar-width: 260px;
-    --tc-background: 0 0% 100%;
-    --tc-foreground: 222.2 84% 4.9%;
-    --tc-card: 0 0% 100%;
-    --tc-card-foreground: 222.2 84% 4.9%;
-    --tc-popover: 0 0% 100%;
-    --tc-popover-foreground: 222.2 84% 4.9%;
-    --tc-primary: 221.2 83.2% 53.3%;
-    --tc-primary-foreground: 210 40% 98%;
-    --tc-secondary: 210 40% 96.1%;
-    --tc-secondary-foreground: 222.2 47.4% 11.2%;
-    --tc-muted: 210 40% 96.1%;
-    --tc-muted-foreground: 215.4 16.3% 46.9%;
-    --tc-accent: 210 40% 96.1%;
-    --tc-accent-foreground: 222.2 47.4% 11.2%;
-    --tc-destructive: 0 84.2% 60.2%;
-    --tc-destructive-foreground: 210 40% 98%;
-    --tc-border: 214.3 31.8% 91.4%;
-    --tc-input: 214.3 31.8% 91.4%;
-    --tc-ring: 221.2 83.2% 53.3%;
-    --tc-radius: 0.5rem;
-  }
-  .dark {
-    --tc-background: 222.2 84% 4.9%;
-    --tc-foreground: 210 40% 98%;
-    --tc-card: 222.2 84% 4.9%;
-    --tc-card-foreground: 210 40% 98%;
-    --tc-popover: 222.2 84% 4.9%;
-    --tc-popover-foreground: 210 40% 98%;
-    --tc-primary: 217.2 91.2% 59.8%;
-    --tc-primary-foreground: 222.2 47.4% 11.2%;
-    --tc-secondary: 217.2 32.6% 17.5%;
-    --tc-secondary-foreground: 210 40% 98%;
-    --tc-muted: 217.2 32.6% 17.5%;
-    --tc-muted-foreground: 215 20.2% 65.1%;
-    --tc-accent: 217.2 32.6% 17.5%;
-    --tc-accent-foreground: 210 40% 98%;
-    --tc-destructive: 0 62.8% 30.6%;
-    --tc-destructive-foreground: 210 40% 98%;
-    --tc-border: 217.2 32.6% 17.5%;
-    --tc-input: 217.2 32.6% 17.5%;
-    --tc-ring: 224.3 76.3% 48%;
-  }
+/* ─── Design System: CSS Variables ──────────────────────────────────────────
+   Light mode  → :root  (default)
+   Dark mode   → .dark  (toggled by ThemeProvider on <html>)
+   Legacy dark → .dark kept for backward-compat with existing hardcoded values
+────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Backgrounds */
+  --bg-primary:      #ffffff;
+  --bg-surface:      #ffffff;
+  --bg-card:         #ffffff;
+  --bg-card-hover:   #f8f8ff;
+  --bg-subtle:       rgba(0,0,0,0.04);
+  --bg-subtle-md:    rgba(0,0,0,0.07);
+
+  /* Borders */
+  --border-subtle:   rgba(0,0,0,0.09);
+  --border-default:  rgba(0,0,0,0.13);
+  --border-active:   #7c3aed;
+
+  /* Text */
+  --text-primary:    #000000;
+  --text-secondary:  #1e293b;
+  --text-muted:      #475569;
+  --text-placeholder:#94a3b8;
+
+  /* Brand */
+  --brand-primary:   #7c3aed;
+  --brand-light:     #8b5cf6;
+
+  /* Shadows */
+  --shadow-card:     0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+
+  /* react-table-craft tokens */
+  --tc-background: 0 0% 100%;
+  --tc-foreground: 222.2 84% 4.9%;
+  --tc-card: 0 0% 100%;
+  --tc-card-foreground: 222.2 84% 4.9%;
+  --tc-popover: 0 0% 100%;
+  --tc-popover-foreground: 222.2 84% 4.9%;
+  --tc-primary: 262 83% 57%;
+  --tc-primary-foreground: 210 40% 98%;
+  --tc-secondary: 210 40% 96.1%;
+  --tc-secondary-foreground: 222.2 47.4% 11.2%;
+  --tc-muted: 210 40% 96.1%;
+  --tc-muted-foreground: 215.4 16.3% 46.9%;
+  --tc-accent: 210 40% 96.1%;
+  --tc-accent-foreground: 222.2 47.4% 11.2%;
+  --tc-destructive: 0 84.2% 60.2%;
+  --tc-destructive-foreground: 210 40% 98%;
+  --tc-border: 214.3 31.8% 91.4%;
+  --tc-input: 214.3 31.8% 91.4%;
+  --tc-ring: 262 83% 57%;
+  --tc-radius: 0.5rem;
 }
 
-/* ─── Light mode overrides ────────────────────────────────────────────────
-   Applied when html.light class is present (toggled by ThemeProvider).
-   Overrides every hardcoded dark hex used across the component tree.
+.dark {
+  /* Backgrounds */
+  --bg-primary:      #080c14;
+  --bg-surface:      #0a0f1a;
+  --bg-card:         #0f1623;
+  --bg-card-hover:   #141b2d;
+  --bg-subtle:       rgba(255,255,255,0.05);
+  --bg-subtle-md:    rgba(255,255,255,0.08);
+
+  /* Borders */
+  --border-subtle:   rgba(255,255,255,0.05);
+  --border-default:  rgba(255,255,255,0.08);
+  --border-active:   #7c3aed;
+
+  /* Text */
+  --text-primary:    #e2e8f0;
+  --text-secondary:  #94a3b8;
+  --text-muted:      #475569;
+  --text-placeholder:#334155;
+
+  /* Brand */
+  --brand-primary:   #7c3aed;
+  --brand-light:     #8b5cf6;
+
+  /* Shadows */
+  --shadow-card:     0 1px 4px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+
+  /* react-table-craft tokens */
+  --tc-background: 222.2 84% 4.9%;
+  --tc-foreground: 210 40% 98%;
+  --tc-card: 215 28% 9%;
+  --tc-card-foreground: 210 40% 98%;
+  --tc-popover: 215 28% 9%;
+  --tc-popover-foreground: 210 40% 98%;
+  --tc-primary: 262 83% 57%;
+  --tc-primary-foreground: 222.2 47.4% 11.2%;
+  --tc-secondary: 217.2 32.6% 17.5%;
+  --tc-secondary-foreground: 210 40% 98%;
+  --tc-muted: 217.2 32.6% 17.5%;
+  --tc-muted-foreground: 215 20.2% 65.1%;
+  --tc-accent: 217.2 32.6% 17.5%;
+  --tc-accent-foreground: 210 40% 98%;
+  --tc-destructive: 0 62.8% 30.6%;
+  --tc-destructive-foreground: 210 40% 98%;
+  --tc-border: 217.2 32.6% 17.5%;
+  --tc-input: 217.2 32.6% 17.5%;
+  --tc-ring: 262 83% 57%;
+}
+
+@layer base {
+  *, *::before, *::after { border-color: var(--border-subtle); }
+  html { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    @apply antialiased;
+  }
+  code, kbd, pre, samp { font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace; }
+
+  /* Scrollbar — dark */
+  .dark ::-webkit-scrollbar           { background: #0a0f1a; width: 6px; height: 6px; }
+  .dark ::-webkit-scrollbar-thumb     { background: #1e293b; border-radius: 4px; }
+  .dark ::-webkit-scrollbar-thumb:hover{ background: #334155; }
+
+  /* Scrollbar — light */
+  .light ::-webkit-scrollbar          { background: #f1f5f9; width: 6px; height: 6px; }
+  .light ::-webkit-scrollbar-thumb    { background: #cbd5e1; border-radius: 4px; }
+  .light ::-webkit-scrollbar-thumb:hover{ background: #94a3b8; }
+}
+
+/* ─── Component classes ──────────────────────────────────────────────────── */
+@layer components {
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-violet-600 hover:bg-violet-500 text-white px-3.5 py-1.5 rounded-lg text-sm
+           font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed
+           inline-flex items-center gap-2;
+  }
+  .btn-secondary {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    @apply px-3.5 py-1.5 rounded-xl text-sm font-medium transition-all
+           hover:border-violet-500/50 inline-flex items-center gap-2;
+  }
+  .btn-danger {
+    @apply bg-red-600/20 text-red-400 border border-red-500/30 px-3.5 py-1.5 rounded-xl
+           text-sm font-medium transition-colors hover:bg-red-600/30
+           inline-flex items-center gap-2;
+  }
+  .btn-ghost {
+    color: var(--text-muted);
+    @apply px-3 py-2 rounded-lg text-sm transition-colors inline-flex items-center gap-2;
+  }
+  .btn-ghost:hover { color: var(--text-primary); background: var(--bg-subtle); }
+
+  /* Inputs */
+  .input-field {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    @apply rounded-xl px-4 py-2.5 text-sm w-full transition-all outline-none
+           placeholder:text-[color:var(--text-placeholder)];
+  }
+  .input-field:focus { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
+
+  /* Legacy .input alias */
+  .input {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    @apply rounded-xl px-4 py-2.5 text-sm w-full transition-all outline-none
+           placeholder:text-[color:var(--text-placeholder)];
+  }
+  .input:focus { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-card);
+    @apply rounded-2xl;
+  }
+  .card-hover { @apply transition-all duration-200; }
+  .card-hover:hover {
+    border-color: rgba(124,58,237,0.2);
+    background: var(--bg-card-hover);
+  }
+
+  /* Sidebar items */
+  .sidebar-item {
+    color: var(--text-muted);
+    @apply flex gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all;
+  }
+  .sidebar-item:hover { color: var(--text-primary); background: var(--bg-subtle); }
+  .sidebar-item.active {
+    @apply bg-violet-600/20 text-violet-300 border border-violet-500/30;
+  }
+
+  /* Typography */
+  .page-title    { color: var(--text-primary);   @apply text-2xl font-bold; }
+  .page-subtitle { color: var(--text-muted);     @apply text-sm mt-1; }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-green  { @apply badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+  .badge-red    { @apply badge bg-red-500/10    text-red-400    border border-red-500/20; }
+  .badge-yellow { @apply badge bg-amber-500/10  text-amber-400  border border-amber-500/20; }
+  .badge-blue   { @apply badge bg-blue-500/10   text-blue-400   border border-blue-500/20; }
+  .badge-gray   { @apply badge bg-gray-500/10   text-gray-400   border border-gray-500/20; }
+  .badge-violet { @apply badge bg-violet-500/10 text-violet-400 border border-violet-500/20; }
+}
+
+/* ─── Light mode overrides for existing hardcoded dark pages ──────────────
+   These keep existing pages readable when html.light class is present.
+   New pages/components use CSS variables instead.
 ────────────────────────────────────────────────────────────────────────── */
 
 /* Page / layout backgrounds */
-html.light body                    { background-color: #f1f5f9; color: #0f172a; }
-html.light .bg-\[\#080d16\]        { background-color: #f1f5f9 !important; }
-html.light .bg-\[\#0d1117\]        { background-color: #f1f5f9 !important; }
-html.light .bg-\[\#0a0f1a\]        { background-color: #f1f5f9 !important; }
-html.light .min-h-screen           { background-color: #f1f5f9; }
+html.light body                          { background-color: #f1f5f9 !important; color: #0f172a !important; }
+html.light .bg-\[\#080d16\]              { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#0d1117\]              { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#0a0f1a\]              { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#080c14\]              { background-color: #f1f5f9 !important; }
+html.light .min-h-screen                 { background-color: #f1f5f9; }
 
 /* Card / surface backgrounds */
-html.light .bg-\[\#111827\]        { background-color: #ffffff !important; }
-html.light .bg-\[\#161b27\]        { background-color: #ffffff !important; }
-html.light .bg-\[\#1a2234\]        { background-color: #ffffff !important; }
-html.light .bg-\[\#0f172a\]        { background-color: #f8fafc !important; }
-html.light .bg-\[\#0d1117\]        { background-color: #f8fafc !important; }
+html.light .bg-\[\#111827\]              { background-color: #ffffff !important; }
+html.light .bg-\[\#161b27\]              { background-color: #ffffff !important; }
+html.light .bg-\[\#1a2234\]              { background-color: #ffffff !important; }
+html.light .bg-\[\#0f172a\]              { background-color: #f8fafc !important; }
+html.light .bg-\[\#0f1623\]              { background-color: #ffffff !important; }
 
-/* Hover / active / input backgrounds */
-html.light .bg-\[\#1e293b\]        { background-color: #f1f5f9 !important; }
-html.light .bg-\[\#1e293b\]\/40    { background-color: rgba(241,245,249,0.7) !important; }
-html.light .bg-\[\#1e293b\]\/50    { background-color: rgba(241,245,249,0.8) !important; }
-html.light .bg-\[\#334155\]        { background-color: #e2e8f0 !important; }
+/* Hover / input / subtle backgrounds */
+html.light .bg-\[\#1e293b\]              { background-color: #f1f5f9 !important; }
+html.light .bg-\[\#1e293b\]\/40          { background-color: rgba(241,245,249,0.7) !important; }
+html.light .bg-\[\#1e293b\]\/50          { background-color: rgba(241,245,249,0.8) !important; }
+html.light .bg-\[\#334155\]              { background-color: #e2e8f0 !important; }
 
 /* Header */
-html.light header.sticky           { background-color: #ffffff !important; border-bottom-color: #e2e8f0 !important; }
-html.light .bg-gray-800\/70        { background-color: #f1f5f9 !important; }
-html.light .bg-gray-800            { background-color: #f1f5f9 !important; }
-html.light .bg-gray-900            { background-color: #ffffff !important; }
-html.light .bg-gray-700            { background-color: #e2e8f0 !important; }
-
+html.light header.sticky                 { background-color: #ffffff !important; border-bottom-color: #e2e8f0 !important; }
+html.light .bg-gray-800\/70              { background-color: rgba(241,245,249,0.9) !important; }
+html.light .bg-gray-800                  { background-color: #e2e8f0 !important; }
+html.light .bg-gray-900                  { background-color: #ffffff !important; }
+html.light .bg-gray-700                  { background-color: #e2e8f0 !important; }
 
 /* Borders */
-html.light .border-\[\#1e293b\]    { border-color: #e2e8f0 !important; }
-html.light .border-\[\#1e293b\]\/60{ border-color: rgba(226,232,240,0.8) !important; }
-html.light .border-\[\#334155\]    { border-color: #cbd5e1 !important; }
-html.light .border-gray-800        { border-color: #e2e8f0 !important; }
-html.light .border-gray-800\/60    { border-color: rgba(226,232,240,0.8) !important; }
-html.light .border-gray-700        { border-color: #e2e8f0 !important; }
-html.light .border-gray-700\/50    { border-color: rgba(226,232,240,0.7) !important; }
-html.light .border-gray-700\/60    { border-color: rgba(226,232,240,0.8) !important; }
+html.light .border-\[\#1e293b\]          { border-color: #e2e8f0 !important; }
+html.light .border-\[\#1e293b\]\/60      { border-color: rgba(226,232,240,0.8) !important; }
+html.light .border-\[\#334155\]          { border-color: #cbd5e1 !important; }
+html.light .border-gray-800             { border-color: #e2e8f0 !important; }
+html.light .border-gray-800\/40         { border-color: rgba(226,232,240,0.6) !important; }
+html.light .border-gray-800\/60         { border-color: rgba(226,232,240,0.8) !important; }
+html.light .border-gray-700             { border-color: #e2e8f0 !important; }
+html.light .border-gray-700\/50         { border-color: rgba(226,232,240,0.7) !important; }
+html.light .border-gray-700\/60         { border-color: rgba(226,232,240,0.8) !important; }
 
 /* Primary text */
-html.light .text-\[\#e2e8f0\]      { color: #0f172a !important; }
-html.light .text-white             { color: #0f172a !important; }
+html.light .text-\[\#e2e8f0\]           { color: #0f172a !important; }
+html.light .text-white                   { color: #0f172a !important; }
+html.light .text-gray-200               { color: #0f172a !important; }
 
 /* Secondary text */
-html.light .text-\[\#94a3b8\]      { color: #475569 !important; }
-html.light .text-gray-400          { color: #475569 !important; }
-html.light .text-gray-300          { color: #334155 !important; }
+html.light .text-\[\#94a3b8\]           { color: #475569 !important; }
+html.light .text-gray-400               { color: #475569 !important; }
+html.light .text-gray-300               { color: #334155 !important; }
 
 /* Muted text */
-html.light .text-\[\#475569\]      { color: #64748b !important; }
-html.light .text-gray-500          { color: #64748b !important; }
-html.light .text-\[\#334155\]      { color: #94a3b8 !important; }
-html.light .text-gray-600          { color: #475569 !important; }
+html.light .text-\[\#475569\]           { color: #64748b !important; }
+html.light .text-gray-500               { color: #64748b !important; }
+html.light .text-gray-600               { color: #475569 !important; }
+html.light .text-gray-700               { color: #94a3b8 !important; }
 
-/* Dividers */
-html.light .bg-gray-700\/60        { background-color: #e2e8f0 !important; }
-html.light .bg-gray-800\/30        { background-color: rgba(241,245,249,0.7) !important; }
-
-/* Inputs / selects */
-html.light input:not([class*="bg-"]),
-html.light select:not([class*="bg-"]) {
-  background-color: #ffffff;
-  border-color: #e2e8f0;
-  color: #0f172a;
-}
-html.light input::placeholder      { color: #94a3b8 !important; }
-
-/* Ring on focus */
-html.light .ring-\[\#111827\]      { --tw-ring-color: #ffffff !important; }
-
-/* Stat card accent bar stays colored — don't override inline styles */
-
-/* Dashboard-specific overrides */
-html.light .bg-\[\#161b27\]            { background-color: #ffffff !important; }
-html.light .border-gray-800\/40        { border-color: rgba(226,232,240,0.6) !important; }
-html.light .border-gray-800\/60        { border-color: rgba(226,232,240,0.8) !important; }
-html.light .bg-gray-800\/60            { background-color: #f1f5f9 !important; }
-html.light .bg-gray-800\/30            { background-color: rgba(241,245,249,0.7) !important; }
-html.light .bg-gray-800\/40            { background-color: rgba(241,245,249,0.8) !important; }
-html.light .hover\:bg-gray-800\/30:hover { background-color: rgba(241,245,249,0.9) !important; }
+/* Dividers & progress tracks */
+html.light .bg-gray-700\/60             { background-color: #e2e8f0 !important; }
+html.light .bg-gray-800\/30             { background-color: rgba(241,245,249,0.7) !important; }
+html.light .bg-gray-800\/40             { background-color: rgba(241,245,249,0.8) !important; }
+html.light .bg-gray-800\/60             { background-color: #f1f5f9 !important; }
+html.light .hover\:bg-gray-800\/30:hover{ background-color: rgba(241,245,249,0.9) !important; }
 html.light .divide-gray-800\/40 > * + * { border-color: rgba(226,232,240,0.6) !important; }
-html.light .text-gray-200              { color: #0f172a !important; }
-html.light .text-gray-700              { color: #94a3b8 !important; }
+html.light .bg-gray-800.rounded-full    { background-color: #e2e8f0 !important; }
 
-/* Progress bar tracks */
-html.light .bg-gray-800.rounded-full   { background-color: #e2e8f0 !important; }
-html.light .bg-gray-800:not(.border):not(button):not(div[class*="border"]) {
-  background-color: #e2e8f0 !important;
-}
+/* Inputs */
+html.light input:not([class*="bg-"]),
+html.light select:not([class*="bg-"])   { background-color: #ffffff; border-color: #e2e8f0; color: #0f172a; }
+html.light input::placeholder           { color: #94a3b8 !important; }
+html.light .ring-\[\#111827\]           { --tw-ring-color: #ffffff !important; }
 
-/* Inline-style Recharts override via filter (light mode tint) */
+/* Recharts */
 html.light .recharts-cartesian-grid line { stroke: #e2e8f0 !important; }
 html.light .recharts-text                { fill: #64748b !important; }
 html.light .recharts-tooltip-wrapper .recharts-default-tooltip {
@@ -156,43 +298,65 @@ html.light .recharts-tooltip-wrapper .recharts-default-tooltip {
   color: #0f172a !important;
 }
 
-/* Status pills keep their color in light mode — only soften border */
-html.light .border-green-500\/30       { border-color: rgba(34,197,94,0.4) !important; }
-html.light .border-yellow-500\/30      { border-color: rgba(234,179,8,0.4) !important; }
-html.light .border-red-500\/30         { border-color: rgba(239,68,68,0.4) !important; }
-html.light .border-blue-500\/30        { border-color: rgba(59,130,246,0.4) !important; }
-html.light .border-gray-500\/30        { border-color: rgba(107,114,128,0.4) !important; }
+/* Status pill borders */
+html.light .border-green-500\/30  { border-color: rgba(34,197,94,0.4)   !important; }
+html.light .border-yellow-500\/30 { border-color: rgba(234,179,8,0.4)   !important; }
+html.light .border-red-500\/30    { border-color: rgba(239,68,68,0.4)   !important; }
+html.light .border-blue-500\/30   { border-color: rgba(59,130,246,0.4)  !important; }
+html.light .border-gray-500\/30   { border-color: rgba(107,114,128,0.4) !important; }
 
-/* Skeleton pulse bg */
-html.light .bg-gray-800.animate-pulse  { background-color: #e2e8f0 !important; }
+/* Skeleton */
+html.light .bg-gray-800.animate-pulse   { background-color: #e2e8f0 !important; }
 
-/* Scrollbar */
-html.light ::-webkit-scrollbar           { background: #f1f5f9; }
-html.light ::-webkit-scrollbar-thumb     { background: #cbd5e1; border-radius: 4px; }
-html.light ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+/* ─── Dark mode — map hardcoded hex values to CSS design variables ───────
+   Ensures ALL existing pages that use hardcoded dark hex colors
+   inherit the design system tokens in dark mode.
+────────────────────────────────────────────────────────────────────────── */
 
-@layer components {
-  .card {
-    @apply bg-white border border-gray-200 rounded-xl p-5 shadow-sm;
-  }
-  .btn-primary {
-    @apply bg-violet-600 hover:bg-violet-500 text-white font-medium px-4 py-2 rounded-lg
-           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-  .btn-ghost {
-    @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors;
-  }
-  .input {
-    @apply bg-white border border-gray-300 text-gray-900 rounded-lg px-3 py-2
-           focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent
-           placeholder:text-gray-400 w-full;
-  }
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-  }
-  .badge-green  { @apply badge bg-emerald-100 text-emerald-700; }
-  .badge-red    { @apply badge bg-red-100 text-red-700; }
-  .badge-yellow { @apply badge bg-amber-100 text-amber-700; }
-  .badge-blue   { @apply badge bg-blue-100 text-blue-700; }
-  .badge-gray   { @apply badge bg-gray-100 text-gray-600; }
+/* Page / layout backgrounds */
+.dark .bg-\[\#080d16\]         { background-color: var(--bg-primary)  !important; }
+.dark .bg-\[\#0d1117\]         { background-color: var(--bg-primary)  !important; }
+.dark .bg-\[\#0a0f1a\]         { background-color: var(--bg-surface)  !important; }
+.dark .bg-\[\#0a0f1e\]         { background-color: var(--bg-surface)  !important; }
+.dark .bg-\[\#080c14\]         { background-color: var(--bg-primary)  !important; }
+.dark .min-h-screen            { background-color: var(--bg-primary); }
+
+/* Card / surface backgrounds */
+.dark .bg-\[\#111827\]         { background-color: var(--bg-card)      !important; }
+.dark .bg-\[\#161b27\]         { background-color: var(--bg-card)      !important; }
+.dark .bg-\[\#1a2234\]         { background-color: var(--bg-card-hover)!important; }
+.dark .bg-\[\#0f172a\]         { background-color: var(--bg-surface)   !important; }
+.dark .bg-\[\#0f1623\]         { background-color: var(--bg-card)      !important; }
+
+/* Borders */
+.dark .border-\[\#1e293b\]     { border-color: var(--border-default)   !important; }
+.dark .border-gray-800         { border-color: var(--border-subtle)    !important; }
+.dark .border-gray-800\/60     { border-color: var(--border-subtle)    !important; }
+.dark .border-gray-800\/40     { border-color: var(--border-subtle)    !important; }
+.dark .border-gray-700         { border-color: var(--border-default)   !important; }
+.dark .border-gray-700\/50     { border-color: var(--border-subtle)    !important; }
+.dark .border-gray-700\/60     { border-color: var(--border-subtle)    !important; }
+
+/* Input / subtle backgrounds */
+.dark .bg-gray-800\/70         { background-color: var(--bg-subtle)    !important; }
+.dark .bg-gray-800\/60         { background-color: var(--bg-subtle)    !important; }
+.dark .bg-gray-800\/40         { background-color: var(--bg-subtle)    !important; }
+.dark .bg-gray-800\/30         { background-color: var(--bg-subtle)    !important; }
+
+/* Header sticky */
+.dark header.sticky            {
+  background-color: var(--bg-card)    !important;
+  border-bottom-color: var(--border-subtle) !important;
+}
+
+/* Progress bar tracks */
+.dark .bg-gray-800.rounded-full { background-color: var(--bg-subtle-md) !important; }
+
+/* Recharts dark */
+.dark .recharts-cartesian-grid line { stroke: var(--border-subtle) !important; }
+.dark .recharts-text                { fill: var(--text-muted)      !important; }
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: var(--bg-card)     !important;
+  border-color:     var(--border-default) !important;
+  color:            var(--text-primary)   !important;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import Header from "@/components/Header";
 import { useDashboardKpis, useMonthlyRevenueTrend } from "@/hooks/useReports";
 import { usePayments, type PaymentDTO } from "@/hooks/useBilling";
 import {
@@ -101,316 +100,253 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0d1117]">
-      <Header title="Dashboard" />
+    <div className="p-6 space-y-5 max-w-screen-2xl mx-auto">
 
-      <div className="p-6 space-y-5">
-
-        {/* ── Top action row ─────────────────────────────────── */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-gray-500 text-sm">
-            <Clock className="w-4 h-4" />
-            <span>Last update just now</span>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#161b27] border border-gray-700 rounded-xl text-gray-300 text-sm hover:bg-gray-800 transition-colors">
-            <Download className="w-4 h-4" />
-            Export
+      {/* ── Header row ─────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="page-subtitle">Welcome back — here's what's happening today</p>
+        </div>
+        <div className="flex gap-2 sm:ml-auto">
+          <span className="flex items-center gap-1.5 text-sm" style={{ color: "var(--text-muted)" }}>
+            <Clock className="w-4 h-4" /> Updated just now
+          </span>
+          <button className="btn-secondary text-sm">
+            <Download size={14} /> Export
           </button>
         </div>
+      </div>
 
-        {/* ── 4 Stat Cards ────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {STAT_CARDS.map(card => (
-            <div key={card.label} className="bg-[#161b27] border border-gray-800/60 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-9 h-9 rounded-xl ${card.iconBg} flex items-center justify-center`}>
-                  <card.icon className={`w-[18px] h-[18px] ${card.iconColor}`} />
-                </div>
-                <button className="text-gray-700 hover:text-gray-500 transition-colors">
-                  <MoreHorizontal className="w-4 h-4" />
-                </button>
-              </div>
-              <p className="text-xs text-gray-500 font-medium mb-1">{card.label}</p>
-              <p className="text-[28px] font-bold text-white leading-none mb-3">
-                {kpiLoading ? <span className="text-gray-700 animate-pulse">···</span> : card.value}
-              </p>
-              <div className="flex items-center gap-2">
-                {card.trend !== null && !kpiLoading && (
-                  <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
-                    card.trend >= 0
-                      ? "bg-green-500/15 text-green-400 border-green-500/20"
-                      : "bg-red-500/15 text-red-400 border-red-500/20"
-                  }`}>
-                    {card.trend >= 0
-                      ? <ArrowUpRight className="w-3 h-3" />
-                      : <ArrowDownRight className="w-3 h-3" />}
-                    {Math.abs(card.trend).toFixed(1)}%
-                  </span>
-                )}
-                <span className="text-xs text-gray-500">{card.sub}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Chart + Performance ─────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-
-          {/* Revenue & Expenses Bar Chart */}
-          <div className="lg:col-span-3 bg-[#161b27] border border-gray-800/60 rounded-2xl p-5">
+      {/* ── 4 Stat Cards ────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {STAT_CARDS.map(card => (
+          <div key={card.label} className="card p-5">
             <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Revenue &amp; Expenses</h3>
-                <div className="flex items-center gap-4 mt-2.5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                    <span className="text-xs text-gray-400">Revenue</span>
-                    {kpi && (
-                      <>
-                        <span className="text-xs font-bold text-white">
-                          Rs. {(kpi.totalRevenueLkr / 1000).toFixed(0)}K
-                        </span>
-                        {kpi.revenueGrowthPct != null && (
-                          <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${
-                            kpi.revenueGrowthPct >= 0 ? "bg-green-500/15 text-green-400" : "bg-red-500/15 text-red-400"
-                          }`}>
-                            {kpi.revenueGrowthPct >= 0 ? "↑" : "↓"}{Math.abs(kpi.revenueGrowthPct).toFixed(1)}%
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <div className="w-px h-3 bg-gray-700" />
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-pink-500" />
-                    <span className="text-xs text-gray-400">Expenses</span>
-                  </div>
-                </div>
+              <div className={`w-9 h-9 rounded-xl ${card.iconBg} flex items-center justify-center`}>
+                <card.icon className={`w-[18px] h-[18px] ${card.iconColor}`} />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-xs text-gray-300">
-                  <Calendar className="w-3.5 h-3.5" /> This Year
-                </span>
-                <button className="text-gray-700 hover:text-gray-500 transition-colors">
-                  <MoreHorizontal className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            {chartLoad ? (
-              <div className="h-56 flex items-center justify-center text-gray-700 text-sm animate-pulse">
-                Loading chart...
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={230}>
-                <BarChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barGap={3} barCategoryGap="30%">
-                  <CartesianGrid strokeDasharray="3 3" stroke={isLight ? "#e2e8f0" : "#1f2937"} vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: isLight ? "#64748b" : "#4b5563", fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: isLight ? "#64748b" : "#4b5563", fontSize: 10 }} axisLine={false} tickLine={false}
-                    tickFormatter={v => `${(v / 1000).toFixed(0)}K`} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: isLight ? "#ffffff" : "#111827", border: `1px solid ${isLight ? "#e2e8f0" : "#374151"}`, borderRadius: 10, fontSize: 12 }}
-                    labelStyle={{ color: isLight ? "#475569" : "#9ca3af", fontWeight: 600, marginBottom: 4 }}
-                    formatter={(v: number) => [`Rs. ${v.toLocaleString()}`, ""]}
-                    cursor={{ fill: isLight ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)" }}
-                  />
-                  <Bar dataKey="Revenue"  fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={18} />
-                  <Bar dataKey="Expenses" fill="#ec4899" radius={[4, 4, 0, 0]} maxBarSize={18} />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-
-          {/* Performance Panel */}
-          <div className="lg:col-span-2 bg-[#161b27] border border-gray-800/60 rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-sm font-semibold text-white">Performance</h3>
-              <button className="text-gray-700 hover:text-gray-500 transition-colors">
+              <button style={{ color: "var(--border-default)" }}>
                 <MoreHorizontal className="w-4 h-4" />
               </button>
             </div>
+            <p className="text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>{card.label}</p>
+            <p className="text-[28px] font-bold leading-none mb-3" style={{ color: "var(--text-primary)" }}>
+              {kpiLoading ? <span style={{ color: "var(--border-default)" }} className="animate-pulse">···</span> : card.value}
+            </p>
+            <div className="flex items-center gap-2">
+              {card.trend !== null && !kpiLoading && (
+                <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
+                  card.trend >= 0
+                    ? "bg-green-500/15 text-green-400 border-green-500/20"
+                    : "bg-red-500/15 text-red-400 border-red-500/20"
+                }`}>
+                  {card.trend >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                  {Math.abs(card.trend).toFixed(1)}%
+                </span>
+              )}
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>{card.sub}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
-            <div className="space-y-6">
-              {/* Membership Retention */}
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0">
-                    <Target className="w-[18px] h-[18px] text-green-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white">Membership Retention</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {retentionPct >= 80 ? "Retention target achieved!" : "Below retention target"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-green-600 to-green-400 rounded-full transition-all duration-700"
-                      style={{ width: `${Math.min(retentionPct, 100)}%` }} />
-                  </div>
-                  <span className="text-xs font-bold text-white w-9 text-right flex-shrink-0">
-                    {kpiLoading ? "—" : `${retentionPct.toFixed(0)}%`}
-                  </span>
-                </div>
-              </div>
+      {/* ── Chart + Performance ─────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
-              <div className="border-t border-gray-800/60" />
-
-              {/* Class Fill Rate */}
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-pink-500/10 flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-[18px] h-[18px] text-pink-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white">Class Fill Rate</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {fillRatePct >= 70 ? "Fill rate target achieved!" : "Below fill rate target"}
-                    </p>
-                  </div>
+        {/* Revenue & Expenses Bar Chart */}
+        <div className="card lg:col-span-3 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Revenue &amp; Expenses</h3>
+              <div className="flex items-center gap-4 mt-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>Revenue</span>
+                  {kpi && (
+                    <>
+                      <span className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>
+                        Rs. {(kpi.totalRevenueLkr / 1000).toFixed(0)}K
+                      </span>
+                      {kpi.revenueGrowthPct != null && (
+                        <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${
+                          kpi.revenueGrowthPct >= 0 ? "bg-green-500/15 text-green-400" : "bg-red-500/15 text-red-400"
+                        }`}>
+                          {kpi.revenueGrowthPct >= 0 ? "↑" : "↓"}{Math.abs(kpi.revenueGrowthPct).toFixed(1)}%
+                        </span>
+                      )}
+                    </>
+                  )}
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full transition-all duration-700"
-                      style={{ width: `${Math.min(fillRatePct, 100)}%` }} />
-                  </div>
-                  <span className="text-xs font-bold text-white w-9 text-right flex-shrink-0">
-                    {kpiLoading ? "—" : `${fillRatePct.toFixed(0)}%`}
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-800/60" />
-
-              {/* Shop Revenue Share */}
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                    <ShoppingBag className="w-[18px] h-[18px] text-blue-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white">Shop Revenue Share</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {kpi?.shopOrdersCount
-                        ? `${kpi.shopOrdersCount} orders this period`
-                        : "No shop orders yet"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full transition-all duration-700"
-                      style={{ width: `${Math.min(shopSharePct, 100)}%` }} />
-                  </div>
-                  <span className="text-xs font-bold text-white w-9 text-right flex-shrink-0">
-                    {kpiLoading ? "—" : `${shopSharePct}%`}
-                  </span>
+                <div className="w-px h-3" style={{ background: "var(--border-default)" }} />
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-pink-500" />
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>Expenses</span>
                 </div>
               </div>
             </div>
+            <span
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs"
+              style={{ background: "var(--bg-subtle)", border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
+            >
+              <Calendar className="w-3.5 h-3.5" /> This Year
+            </span>
           </div>
+          {chartLoad ? (
+            <div className="h-56 flex items-center justify-center text-sm animate-pulse" style={{ color: "var(--border-default)" }}>
+              Loading chart...
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={230}>
+              <BarChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barGap={3} barCategoryGap="30%">
+                <CartesianGrid strokeDasharray="3 3" stroke={isLight ? "#e2e8f0" : "#1e2a3a"} vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: isLight ? "#64748b" : "#475569", fontSize: 10 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: isLight ? "#64748b" : "#475569", fontSize: 10 }} axisLine={false} tickLine={false}
+                  tickFormatter={v => `${(v / 1000).toFixed(0)}K`} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: isLight ? "#ffffff" : "#0f1623", border: `1px solid ${isLight ? "#e2e8f0" : "rgba(255,255,255,0.08)"}`, borderRadius: 10, fontSize: 12 }}
+                  labelStyle={{ color: isLight ? "#475569" : "#94a3b8", fontWeight: 600, marginBottom: 4 }}
+                  formatter={(v: number) => [`Rs. ${v.toLocaleString()}`, ""]}
+                  cursor={{ fill: isLight ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)" }}
+                />
+                <Bar dataKey="Revenue"  fill="#7c3aed" radius={[4, 4, 0, 0]} maxBarSize={18} />
+                <Bar dataKey="Expenses" fill="#ec4899" radius={[4, 4, 0, 0]} maxBarSize={18} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
-        {/* ── Recent Payments Table ────────────────────────────── */}
-        <div className="bg-[#161b27] border border-gray-800/60 rounded-2xl overflow-hidden">
-          {/* Table Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800/60">
-            <h3 className="text-sm font-semibold text-white">Recent Payments</h3>
-            <button className="text-gray-700 hover:text-gray-500 transition-colors">
-              <MoreHorizontal className="w-4 h-4" />
+        {/* Performance Panel */}
+        <div className="card lg:col-span-2 p-5">
+          <h3 className="text-sm font-semibold mb-6" style={{ color: "var(--text-primary)" }}>Performance</h3>
+
+          <div className="space-y-6">
+            {[
+              { label: "Membership Retention", sub: retentionPct >= 80 ? "Target achieved!" : "Below target", pct: retentionPct, icon: Target, color: "green", gradient: "from-green-600 to-green-400" },
+              { label: "Class Fill Rate",       sub: fillRatePct >= 70  ? "Target achieved!" : "Below target", pct: fillRatePct,  icon: Calendar, color: "pink",  gradient: "from-pink-600 to-pink-400" },
+              { label: "Shop Revenue Share",    sub: kpi?.shopOrdersCount ? `${kpi.shopOrdersCount} orders` : "No orders yet", pct: shopSharePct, icon: ShoppingBag, color: "violet", gradient: "from-violet-600 to-violet-400" },
+            ].map(({ label, sub, pct, icon: Icon, color, gradient }) => (
+              <React.Fragment key={label}>
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-9 h-9 rounded-xl bg-${color}-500/10 flex items-center justify-center flex-shrink-0`}>
+                      <Icon className={`w-[18px] h-[18px] text-${color}-400`} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{label}</p>
+                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{sub}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "var(--bg-subtle-md)" }}>
+                      <div className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-all duration-700`}
+                        style={{ width: `${Math.min(pct, 100)}%` }} />
+                    </div>
+                    <span className="text-xs font-bold w-9 text-right flex-shrink-0" style={{ color: "var(--text-primary)" }}>
+                      {kpiLoading ? "—" : `${pct.toFixed(0)}%`}
+                    </span>
+                  </div>
+                </div>
+                {label !== "Shop Revenue Share" && (
+                  <div style={{ borderTop: "1px solid var(--border-subtle)" }} />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Recent Payments Table ────────────────────────────────── */}
+      <div className="card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+          <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Recent Payments</h3>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--bg-subtle)", border: "1px solid var(--border-default)" }}>
+              <Search className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--text-muted)" }} />
+              <span className="text-sm" style={{ color: "var(--text-placeholder)" }}>Search payments...</span>
+            </div>
+            <button className="btn-secondary text-xs">
+              <SlidersHorizontal size={13} /> Filter
+            </button>
+            <button className="btn-primary text-xs">
+              <Download size={13} /> Export
             </button>
           </div>
-
-          {/* Search + Actions */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800/40 gap-4">
-            <div className="flex items-center gap-2 bg-gray-800/60 border border-gray-700/50 rounded-xl px-3 py-2 flex-1 max-w-xs">
-              <Search className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
-              <span className="text-gray-500 text-sm">Search payments...</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-1.5 px-3 py-2 bg-gray-800 border border-gray-700 rounded-xl text-gray-400 text-sm hover:text-white hover:bg-gray-700 transition-colors">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                Filter
-              </button>
-              <button className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-xl text-white text-sm font-medium transition-colors">
-                <Download className="w-3.5 h-3.5" />
-                Export
-              </button>
-            </div>
-          </div>
-
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-800/60">
-                  {["Payment #", "Member Name", "Phone", "Type", "Amount", "Method", "Status", "Date"].map(h => (
-                    <th key={h} className="text-left px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800/40">
-                {payLoad ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i}>
-                      {Array.from({ length: 8 }).map((_, j) => (
-                        <td key={j} className="px-5 py-3.5">
-                          <div className="h-4 bg-gray-800 rounded animate-pulse" style={{ width: j === 1 ? 120 : 80 }} />
-                        </td>
-                      ))}
-                    </tr>
-                  ))
-                ) : rows.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-5 py-14 text-center text-gray-600 text-sm">
-                      No payments found
-                    </td>
-                  </tr>
-                ) : (
-                  rows.map((p: PaymentDTO) => (
-                    <tr key={p.id} className="hover:bg-gray-800/30 transition-colors">
-                      <td className="px-5 py-3.5">
-                        <span className="font-mono text-xs text-gray-400">{p.paymentNumber}</span>
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
-                            {(p.memberName ?? "?").charAt(0).toUpperCase()}
-                          </div>
-                          <span className="text-gray-200 font-medium whitespace-nowrap">{p.memberName ?? "—"}</span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-400 whitespace-nowrap">{p.memberPhone ?? "—"}</td>
-                      <td className="px-5 py-3.5 text-gray-300 whitespace-nowrap">
-                        {TYPE_LABEL[p.paymentType] ?? p.paymentType}
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <span className="font-semibold text-white whitespace-nowrap">{p.finalAmountFormatted}</span>
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-400 whitespace-nowrap capitalize text-xs">
-                        {p.method.replace(/_/g, " ").toLowerCase()}
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${STATUS_PILL[p.status] ?? "bg-gray-500/20 text-gray-400 border-gray-500/30"}`}>
-                          {p.status}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-400 text-xs whitespace-nowrap">
-                        {p.paidAt
-                          ? new Date(p.paidAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
-                          : "—"}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
         </div>
 
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                {["Payment #", "Member Name", "Phone", "Type", "Amount", "Method", "Status", "Date"].map(h => (
+                  <th key={h} className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--text-muted)" }}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {payLoad ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <td key={j} className="px-5 py-3.5">
+                        <div className="h-4 rounded animate-pulse" style={{ width: j === 1 ? 120 : 80, background: "var(--bg-subtle-md)" }} />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-5 py-14 text-center text-sm" style={{ color: "var(--text-muted)" }}>
+                    No payments found
+                  </td>
+                </tr>
+              ) : (
+                rows.map((p: PaymentDTO) => (
+                  <tr key={p.id} className="transition-colors" style={{ borderBottom: "1px solid var(--border-subtle)" }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--bg-subtle)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = ""}
+                  >
+                    <td className="px-5 py-3.5">
+                      <span className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>{p.paymentNumber}</span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                          {(p.memberName ?? "?").charAt(0).toUpperCase()}
+                        </div>
+                        <span className="font-medium whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{p.memberName ?? "—"}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>{p.memberPhone ?? "—"}</td>
+                    <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>
+                      {TYPE_LABEL[p.paymentType] ?? p.paymentType}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className="font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{p.finalAmountFormatted}</span>
+                    </td>
+                    <td className="px-5 py-3.5 whitespace-nowrap capitalize text-xs" style={{ color: "var(--text-muted)" }}>
+                      {p.method.replace(/_/g, " ").toLowerCase()}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full border font-semibold ${STATUS_PILL[p.status] ?? "bg-gray-500/10 text-gray-400 border-gray-500/20"}`}>
+                        {p.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-xs whitespace-nowrap" style={{ color: "var(--text-muted)" }}>
+                      {p.paidAt
+                        ? new Date(p.paidAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+                        : "—"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
   );
 }

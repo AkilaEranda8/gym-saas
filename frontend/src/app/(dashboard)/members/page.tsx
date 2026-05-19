@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { UserPlus, Users, TrendingUp, Clock, AlertTriangle, Download } from "lucide-react";
-import Header from "@/components/Header";
 import { useMembers, useMemberStats, deleteMember, type Member } from "@/hooks/useMembers";
 import AddMemberModal from "@/components/members/AddMemberModal";
 import api from "@/lib/axios";
@@ -14,13 +13,13 @@ import { TableActionsRow } from "@/components/table/table-actions-row";
 
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value?: number; color: string }) {
   return (
-    <div className="bg-[#111827] border border-[#1e293b] rounded-xl p-5 flex items-center gap-4">
-      <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: color + "18" }}>
+    <div className="card p-4 flex items-center gap-3">
+      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: color + "1a" }}>
         <div style={{ color }}>{icon}</div>
       </div>
       <div>
-        <div className="text-2xl font-bold text-[#e2e8f0]">{value ?? "—"}</div>
-        <div className="text-xs text-[#475569]">{label}</div>
+        <div className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{value ?? "—"}</div>
+        <div className="text-[11px]" style={{ color: "var(--text-muted)" }}>{label}</div>
       </div>
     </div>
   );
@@ -104,20 +103,26 @@ export default function MembersPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080d16]">
-      <Header title="Members" />
-      <div className="p-6 space-y-5">
+    <div className="p-6 space-y-5 max-w-screen-2xl mx-auto">
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard icon={<Users className="w-5 h-5" />}         label="Total Members"      value={stats?.totalMembers}     color="#a855f7" />
-          <StatCard icon={<TrendingUp className="w-5 h-5" />}    label="Active"             value={stats?.activeMembers}    color="#34d399" />
-          <StatCard icon={<AlertTriangle className="w-5 h-5" />} label="Expiring This Week" value={stats?.expiringThisWeek} color="#f59e0b" />
-          <StatCard icon={<Clock className="w-5 h-5" />}         label="Checked In Today"   value={stats?.checkedInToday}   color="#60a5fa" />
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div>
+          <h1 className="page-title">Members</h1>
+          <p className="page-subtitle">Manage your gym members and their memberships</p>
         </div>
+      </div>
 
-        {/* Table */}
-        <ClientSideTable
+      {/* Stats row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <StatCard icon={<Users className="w-5 h-5" />}         label="Total Members"      value={stats?.totalMembers}     color="#a855f7" />
+        <StatCard icon={<TrendingUp className="w-5 h-5" />}    label="Active"             value={stats?.activeMembers}    color="#34d399" />
+        <StatCard icon={<AlertTriangle className="w-5 h-5" />} label="Expiring This Week" value={stats?.expiringThisWeek} color="#f59e0b" />
+        <StatCard icon={<Clock className="w-5 h-5" />}         label="Checked In Today"   value={stats?.checkedInToday}   color="#60a5fa" />
+      </div>
+
+      {/* Table */}
+      <ClientSideTable
           data={members}
           columns={columns}
           pageCount={Math.ceil(members.length / 20)}
@@ -152,8 +157,7 @@ export default function MembersPage() {
               icon: <UserPlus className="w-4 h-4" />,
             },
           ]}
-        />
-      </div>
+      />
 
       <AddMemberModal open={showAdd} onClose={() => setShowAdd(false)} onCreated={refetch} />
     </div>
